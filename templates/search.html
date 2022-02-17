@@ -21,20 +21,24 @@
 <table>
     <tr>
         <th>Name</th>
-        <th>Photo</th>
+        <th>Age</th>
         <th>Nationality</th>
-        <th>Overal</th>
         <th>Club</th>
+        <th>Photo</th>
+        <th>Overal</th>
+        <th>Value</th>
     </tr>
     {% for player in result %}
         <tr>
             <td>{{ player.name }}</td>
+            <td>{{ player.age }}</td>
+            <td>{{ player.nationality }}</td>
+            <td>{{ player.club }}</td>
             <td>
                 <img src={{ player.photo }} alt="" width="80" height="80">
             </td>
-            <td>{{ player.nationality }}</td>
             <td>{{ player.overal }}</td>
-            <td>{{ player.club }}</td>
+            <td>{{ player.value }} €</td>
         </tr>
     {% endfor %}
 </table>
