@@ -20,7 +20,6 @@ class Command(BaseCommand):
 
         cursor = connection.cursor()
         convertor = CurrencyToInt()
-        breakpoint()
         prepared_list = ""
         sss = "("
         for i in range(1, 89):

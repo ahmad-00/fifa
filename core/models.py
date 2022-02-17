@@ -1,3 +1,4 @@
+from django.contrib.postgres.indexes import HashIndex
 from django.db import models
 
 '''
@@ -101,3 +102,8 @@ class Player(models.Model):
 
     class Meta:
         db_table = "player"
+        indexes = [
+            HashIndex(fields=('name',)),
+            HashIndex(fields=('club',)),
+            HashIndex(fields=('nationality',))
+        ]

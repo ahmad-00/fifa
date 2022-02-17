@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<form action="/search" method="GET">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="club">Club:</label>
+    <input type="text" id="club" name="club"><br><br>
+    <label for="club">Nationality:</label>
+    <input type="text" id="nationality" name="nationality"><br><br>
+    <input type="submit" value="Submit">
+    <input type="hidden" name="limit" value="20">
+    <input type="hidden" name="offset" value="0">
+</form>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Photo</th>
+        <th>Nationality</th>
+        <th>Overal</th>
+        <th>Club</th>
+    </tr>
+    {% for player in result %}
+        <tr>
+            <td>{{ player.name }}</td>
+            <td>
+                <img src={{ player.photo }} alt="" width="80" height="80">
+            </td>
+            <td>{{ player.nationality }}</td>
+            <td>{{ player.overal }}</td>
+            <td>{{ player.club }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

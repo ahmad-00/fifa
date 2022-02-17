@@ -3,7 +3,7 @@ class CurrencyToInt:
         if not value:
             return 0
         try:
-            ext = value[:-1]
+            ext = value[-1]
             raw_value = value[1:-1]
             if ext == "M":
                 return int(float(raw_value) * 1000000)
