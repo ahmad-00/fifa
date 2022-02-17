@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Search</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <form action="/search" method="GET">
@@ -37,5 +38,50 @@
         </tr>
     {% endfor %}
 </table>
+<button class="prev_button">Previous Page</button>
+<button class="next_button">Next Page</button>
 </body>
 </html>
+<script>
+    function qs(key) {
+        key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+        var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+        return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+    }
+
+    $('.prev_button').click(function () {
+        var offset = 0;
+        if (qs('offset') !== null) {
+            offset = qs('offset');
+        }
+        var limit = 10;
+        if (qs('limit') !== null) {
+            limit = qs('limit');
+        }
+        offset = parseInt(offset) - parseInt(limit)
+        if (offset < 0) {
+            offset = 0;
+        }
+        var url = new URL(window.location.href);
+        url.searchParams.set("offset", offset); // setting your param
+        var newUrl = url.href;
+        window.location.replace(newUrl);
+    })
+
+    $('.next_button').click(function () {
+        var offset = 0;
+        if (qs('offset') !== null) {
+            offset = qs('offset');
+        }
+        var limit = 10;
+        if (qs('limit') !== null) {
+            limit = qs('limit');
+        }
+        offset = parseInt(offset) + parseInt(limit)
+
+        var url = new URL(window.location.href);
+        url.searchParams.set("offset", offset); // setting your param
+        var newUrl = url.href;
+        window.location.replace(newUrl);
+    })
+</script>
