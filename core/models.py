@@ -1,4 +1,4 @@
-from django.contrib.postgres.indexes import HashIndex
+from django.contrib.postgres.indexes import GinIndex, HashIndex
 from django.db import models
 
 '''
@@ -101,9 +101,11 @@ class Player(models.Model):
     release_clause = models.IntegerField(null=True)
 
     class Meta:
+        # GinIndex is used because tsvector is used for search.
         db_table = "player"
         indexes = [
-            HashIndex(fields=('name',)),
-            HashIndex(fields=('club',)),
-            HashIndex(fields=('nationality',))
+            GinIndex(fields=('name',)),
+            GinIndex(fields=('club',)),
+            GinIndex(fields=('nationality',)),
+            HashIndex(fields=('position',))
         ]

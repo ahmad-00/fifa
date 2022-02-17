@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TeamBuilder</title>
+</head>
+<body>
+<form action="/team_builder" method="GET">
+    <label for="name">Budget:</label>
+    <input type="number" id="budget" name="budget" placeholder="Euro"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+{#context['selected_players'] = {#}
+{#        'goal_keeper': goal_keeper,#}
+{#        'fullbacks': fullbacks,#}
+{#        'halfbacks': halfbacks,#}
+{#        'forwards': forwards#}
+{#    }#}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Nationality</th>
+        <th>Club</th>
+        <th>Photo</th>
+        <th>Overall</th>
+        <th>Value</th>
+    </tr>
+    {% for position, players in selected_players.items %}
+        <h4>{{ position }}</h4>
+        {% for player in players %}
+            <tr>
+                <td>{{ player.name }}</td>
+                <td>{{ player.age }}</td>
+                <td>{{ player.nationality }}</td>
+                <td>{{ player.club }}</td>
+                <td>
+                    <img src={{ player.photo }} alt="" width="80" height="80">
+                </td>
+                <td>{{ player.overal }}</td>
+                <td>{{ player.value }} €</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+</table>
+</body>
+</html>
