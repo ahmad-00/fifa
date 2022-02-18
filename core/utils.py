@@ -13,3 +13,20 @@ class CurrencyToInt:
                 return 0
         except:
             return 0
+
+
+class PositionCategory:
+    def __call__(self, value):
+        if not value:
+            return ''
+
+        if value == 'GK':
+            return 'GK'
+        elif value in ['LB', 'RB', 'LWB', 'RWB']:
+            return 'FB'
+        elif value in ['CB', 'LCB', 'RCB', 'CDM', 'LDM', 'RDM', 'CM', 'LCM', 'RCM', 'LM', 'RM']:
+            return 'HB'
+        elif value in ['CAM', 'LAM', 'RAM', 'LWF', 'RWF', 'CF', 'LCF', 'RCF']:
+            return 'FW'
+        else:
+            return ''

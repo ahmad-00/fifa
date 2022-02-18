@@ -5,19 +5,14 @@
     <title>TeamBuilder</title>
 </head>
 <body>
-<form action="/team_builder" method="GET">
+<form action="/{{ request_url }}" method="GET">
     <label for="name">Budget:</label>
     <input type="number" id="budget" name="budget" placeholder="Euro"><br><br>
     <input type="submit" value="Submit">
 </form>
 
-{#context['selected_players'] = {#}
-{#        'goal_keeper': goal_keeper,#}
-{#        'fullbacks': fullbacks,#}
-{#        'halfbacks': halfbacks,#}
-{#        'forwards': forwards#}
-{#    }#}
 <table>
+    <thead>
     <tr>
         <th>Name</th>
         <th>Age</th>
@@ -27,8 +22,12 @@
         <th>Overall</th>
         <th>Value</th>
     </tr>
+    </thead>
     {% for position, players in selected_players.items %}
-        <h4>{{ position }}</h4>
+        <tbody>
+        <tr>
+            <th colspan="3">{{ position }}</th>
+        </tr>
         {% for player in players %}
             <tr>
                 <td>{{ player.name }}</td>
@@ -42,6 +41,7 @@
                 <td>{{ player.value }} €</td>
             </tr>
         {% endfor %}
+        </tbody>
     {% endfor %}
 </table>
 </body>

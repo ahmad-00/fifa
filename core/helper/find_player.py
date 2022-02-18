@@ -5,18 +5,12 @@ from django.db.models import F
 from core.models import Player
 
 
-def find_player(positions: List[str], budget: Union[float, int], quantity: int) -> List[dict]:
+def find_player(position_category: str, budget: Union[float, int], quantity: int) -> List[dict]:
     players = Player.objects.values(
         'name', 'nationality', 'club', 'age', 'photo', 'overall', 'value', 'release_clause', 'position'
+    ).filter(
+        position_category=position_category
     )
-    if len(positions) == 1:
-        players = players.filter(
-            position=positions[0]
-        )
-    else:
-        players = players.filter(
-            position__in=positions
-        )
 
     players = players.annotate(
         player_fee=F('value') + F('release_clause')

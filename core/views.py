@@ -1,3 +1,5 @@
+import psycopg2.extras
+from django.db import connections
 from django.http import HttpResponse
 from django.template import loader
 
@@ -34,17 +36,19 @@ def search(request):
 def team_builder(request):
     generic_error_message = "Building team failed"
     budget = request.GET.get('budget', None)
-    context = {}
+    context = {'request_url': 'team_builder'}
     template = loader.get_template('teamBuilder.html')
 
     if not budget:
         return HttpResponse(template.render(context, request))
     budget = int(budget)
 
-    # Because there were no reference of how to distribute the budget. I decided to distribute it equally for each player
+    # Because there were no reference of how to distribute the budget.
+    # I decided to distribute it equally for each player
+
     goal_keeper_budget = budget / 11
     goal_keeper = find_player(
-        positions=['GK'],
+        position_category='GK',
         budget=goal_keeper_budget,
         quantity=1
     )
@@ -55,7 +59,7 @@ def team_builder(request):
 
     fullback_budget = budget / 10
     fullbacks = find_player(
-        positions=['LB', 'RB', 'LWB', 'RWB'],
+        position_category='FB',
         budget=fullback_budget,
         quantity=2
     )
@@ -66,7 +70,7 @@ def team_builder(request):
 
     halfback_budget = budget / 8
     halfbacks = find_player(
-        positions=['CB', 'LCB', 'RCB', 'CDM', 'LDM', 'RDM', 'CM', 'LCM', 'RCM', 'LM', 'RM'],
+        position_category='HB',
         budget=halfback_budget,
         quantity=3
     )
@@ -77,7 +81,7 @@ def team_builder(request):
 
     forward_budget = budget / 5
     forwards = find_player(
-        positions=['CAM', 'LAM', 'RAM', 'LWF', 'RWF', 'CF', 'LCF', 'RCF'],
+        position_category='FW',
         budget=forward_budget,
         quantity=5
     )
@@ -92,6 +96,63 @@ def team_builder(request):
         'forwards': forwards
     }
 
+    return HttpResponse(template.render(context, request))
+
+
+def team_builder2(request):
+    generic_error_message = "Building team failed"
+    budget = request.GET.get('budget', None)
+    context = {'request_url': 'team_builder2'}
+    template = loader.get_template('teamBuilder.html')
+
+    if not budget:
+        return HttpResponse(template.render(context, request))
+    budget = int(budget)
+
+    conn = connections['default']  # cursor_factory does not work using default provided connection
+    conn.ensure_connection()
+    with conn.connection.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor
+    ) as cursor:  # This cursor_factory changes tuple result to dict
+        cursor.execute(
+            '''SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY position_category ORDER BY overall desc) AS r, name, nationality, club, age, photo, overall, value, release_clause, position_category FROM player where position_category != '' and (value + release_clause) <= %s) x WHERE x.r <= 5;''',
+            (budget,))
+        players = cursor.fetchall()
+
+    if len(players) < 11:
+        context['error'] = generic_error_message
+        return HttpResponse(template.render(context, request))
+
+    quantity_map = {
+        "GK": 1,
+        "FB": 2,
+        "HB": 3,
+        "FW": 5
+    }
+    players_map = {
+        "GK": [],
+        "FB": [],
+        "HB": [],
+        "FW": []
+    }
+
+    for player in players:
+        position_category = player['position_category']
+        if len(players_map[position_category]) < quantity_map[position_category]:
+            players_map[position_category].append(player)
+
+    for key, value in players_map.items():
+        if len(value) < quantity_map[key]:
+            print(key)
+            context['error'] = generic_error_message
+            return HttpResponse(template.render(context, request))
+
+    context['selected_players'] = {
+        'goal_keeper': players_map['GK'],
+        'fullbacks': players_map['FB'],
+        'halfbacks': players_map['HB'],
+        'forwards': players_map['FW']
+    }
     return HttpResponse(template.render(context, request))
 
 

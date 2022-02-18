@@ -32,6 +32,7 @@ class Player(models.Model):
     body_type = models.CharField(max_length=30, null=True)
     real_face = models.CharField(max_length=3, null=True)
     position = models.CharField(max_length=3, null=True)
+    position_category = models.CharField(max_length=2, null=True)
     jersey_number = models.SmallIntegerField(null=True)
     joined = models.CharField(max_length=20, null=True)
     loaned_from = models.CharField(max_length=50, null=True)
@@ -107,5 +108,5 @@ class Player(models.Model):
             GinIndex(fields=('name',)),
             GinIndex(fields=('club',)),
             GinIndex(fields=('nationality',)),
-            HashIndex(fields=('position',))
+            HashIndex(fields=('position_category',))
         ]
