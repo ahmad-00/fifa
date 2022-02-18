@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import logging
 import os
 import sys
 
@@ -7,7 +8,8 @@ import dotenv
 
 
 def main():
-    dotenv.read_dotenv()
+    if os.environ.get('READ_DOTENV', True) and os.environ.get('READ_DOTENV') != 'False':
+        dotenv.read_dotenv()
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fifa.settings')
     try:

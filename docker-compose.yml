@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: fifa-psql
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./psql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
+      timeout: 45s
+      interval: 5s
+      retries: 10
+
+  web:
+    build: .
+    container_name: fifa
+    command: bash -c "python manage.py migrate && python manage.py initial_data && gunicorn fifa.wsgi:application --bind 0.0.0.0:8000 -w 4"
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
