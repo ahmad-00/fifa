@@ -18,7 +18,7 @@ def search(request):
 
     limit = int(limit)
     offset = int(offset)
-    if name or club or name:
+    if name or club or nationality:
         query = Player.objects.values('name', 'nationality', 'club', 'age', 'photo', 'overall', 'value')
         if name and len(name) > 3:
             query = query.filter(name__search=name)
