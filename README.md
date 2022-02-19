@@ -1,6 +1,7 @@
 # **Running the project**
 
-1. create .env file in root of the project(Same directory that docker-compose.yml file is located).
+1. create .env file in root of the project(Same directory that docker-compose.yml file is located). You can use
+   env_template.txt to create .env file. it includes all required parameters.
 2. If you are using MacBook M1 series to run the project run export `DOCKER_DEFAULT_PLATFORM=linux/amd64`. If not skip
    this step
 3. start the project using `docker compose up`

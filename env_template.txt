@@ -1,9 +1,9 @@
-# SECRET_KEY=
+# SECRET_KEY=[Generate new Key]
 # READ_DOTENV=False
 # DEBUG=True
 # DB_HOST=db
 # DB_PORT=5432
 # LOG_LEVEL=WARN
-# POSTGRES_USER=
-# POSTGRES_PASSWORD=
-# POSTGRES_DB=
+# POSTGRES_USER=[Set the username you want.]
+# POSTGRES_PASSWORD=[Generate new Key]
+# POSTGRES_DB=[Set the db name you want]
