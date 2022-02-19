@@ -12,3 +12,5 @@
   queries. "team_builder2" generate faster response.
 * Cleaning the data could be done in multiple ways based on the business and other factors. I chose to fill Nan values.
 * Images link DO NOT WORK.
+* I had also one issue with position column of dataset. some positions are not included in any of the mentioned
+  categories(Goalkeeper, Fullback, HalfBack, Forward). So those players are not included in team_builder result. 
